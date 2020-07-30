@@ -1,0 +1,50 @@
+openapi: 3.0.2
+info:
+  title: Test
+  version: 1.0.0
+
+paths:
+  /pets:
+    get:
+      operationId: get_my_pet
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyPet'
+          description: GET
+components:
+  schemas:
+    Dog:
+      type: object
+      properties:
+        barkLove:
+          type: boolean
+        breed_like:
+          type: string
+          enum: [Dingo, Husky, Retriever, Shepherd]
+        pet_type:
+          type: string
+      required: 
+      - pet_type
+    Cat:
+      type: object
+      properties:
+        hunts_do:
+          type: boolean
+        age_this:
+          type: integer
+        pet_type:
+          type: string
+      required: 
+      - pet_type
+    MyPet:
+      discriminator:
+        mapping:
+          Dog: '#/components/schemas/Dog'
+          Cat: '#/components/schemas/Cat'
+        propertyName: pet_type
+      oneOf:
+      - $ref: '#/components/schemas/Dog'
+      - $ref: '#/components/schemas/Cat'
